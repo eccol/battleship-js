@@ -60,4 +60,14 @@ export default class Gameboard {
     );
     return wasMissed || wasHit;
   }
+
+  areAllSunk() {
+    for (let i = 0; i < this.xLength; i++) {
+      for (let j = 0; j < this.yLength; j++) {
+        const target = this.shipAt([i, j]);
+        if (target !== null && !target.isSunk()) return false;
+      }
+    }
+    return true;
+  }
 }

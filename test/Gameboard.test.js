@@ -64,3 +64,18 @@ describe('receiveAttack', () => {
     expect(fnMiss).toThrow('Duplicate guess');
   });
 });
+
+describe('areAllSunk', () => {
+  it('returns true if all ships are sunk', () => {
+    gameboard.placeShip(smallShip, [1, 1]);
+    gameboard.receiveAttack([1, 1]);
+    gameboard.receiveAttack([2, 1]);
+    expect(gameboard.areAllSunk()).toBe(true);
+  });
+
+  it('returns false if not all ships are sunk', () => {
+    gameboard.placeShip(smallShip, [1, 1]);
+    gameboard.receiveAttack([1, 1]);
+    expect(gameboard.areAllSunk()).toBe(false);
+  });
+});
