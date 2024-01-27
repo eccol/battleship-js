@@ -3,6 +3,8 @@ export default class Gameboard {
     this.xLength = x;
     this.yLength = y;
     this.board = [];
+    this.misses = [];
+    this.hits = [];
 
     for (let i = 0; i < x; i++) {
       const row = [];
@@ -35,5 +37,27 @@ export default class Gameboard {
 
   shipAt(coords) {
     return this.board[coords[0]][coords[1]];
+  }
+
+  receiveAttack(coords) {
+    if (this.wasAlreadyGuessed(coords)) throw new Error('Duplicate guess');
+
+    const target = this.shipAt(coords);
+    if (target !== null) {
+      target.hit();
+      this.hits.push(coords);
+    } else {
+      this.misses.push(coords);
+    }
+  }
+
+  wasAlreadyGuessed(coords) {
+    const wasMissed = this.misses.some((arr) =>
+      arr.every((v, i) => v === coords[i]),
+    );
+    const wasHit = this.hits.some((arr) =>
+      arr.every((v, i) => v === coords[i]),
+    );
+    return wasMissed || wasHit;
   }
 }
