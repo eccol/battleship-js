@@ -1,0 +1,14 @@
+.board-container {
+  margin: 1rem;
+  display: flex;
+
+  .square {
+    border: 1px solid black;
+    width: 10px;
+    height: 10px;
+  }
+
+  .square.ship {
+    background-color: black;
+  }
+}
