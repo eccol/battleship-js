@@ -34,7 +34,7 @@ function drawBoard(board, self = false) {
       }
 
       square.addEventListener('click', () => {
-        if (!self && !isGameOver()) {
+        if (!self && !isGameOver() && !board.wasAlreadyGuessed([i, j])) {
           if (player.attack([i, j])) {
             square.classList.add('hit');
           } else {
