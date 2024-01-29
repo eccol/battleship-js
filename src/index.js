@@ -16,20 +16,35 @@ for (const board of [playerBoard, cpuBoard]) {
 }
 
 // Generate board on DOM
-function drawBoard(board, reveal = false) {
+function drawBoard(board, self = false) {
   const container = document.createElement('div');
   container.classList.add('board-container');
+
   for (let i = 0; i < board.xLength; i++) {
     const row = document.createElement('div');
     row.classList.add('row');
+
     for (let j = 0; j < board.yLength; j++) {
       const square = document.createElement('div');
       square.classList.add('square');
-      if (reveal && board.shipAt([i, j]) !== null) {
+
+      if (self && board.shipAt([i, j]) !== null) {
         square.classList.add('ship');
       }
+
+      if (!self) {
+        square.addEventListener('click', () => {
+          if (player.attack([i, j])) {
+            square.classList.add('hit');
+          } else {
+            square.classList.add('miss');
+          }
+        });
+      }
+
       row.appendChild(square);
     }
+
     container.appendChild(row);
   }
   return container;
