@@ -27,20 +27,22 @@ function drawBoard(board, self = false) {
     for (let j = 0; j < board.yLength; j++) {
       const square = document.createElement('div');
       square.classList.add('square');
+      if (self) square.dataset.position = `${i},${j}`;
 
       if (self && board.shipAt([i, j]) !== null) {
         square.classList.add('ship');
       }
 
-      if (!self) {
-        square.addEventListener('click', () => {
+      square.addEventListener('click', () => {
+        if (!self && !isGameOver()) {
           if (player.attack([i, j])) {
             square.classList.add('hit');
           } else {
             square.classList.add('miss');
           }
-        });
-      }
+          makeCPUMove();
+        }
+      });
 
       row.appendChild(square);
     }
@@ -54,3 +56,21 @@ const enemyBoardGrid = drawBoard(cpuBoard);
 document.querySelector('.boards').appendChild(enemyBoardGrid);
 const playerBoardGrid = drawBoard(playerBoard, true);
 document.querySelector('.boards').appendChild(playerBoardGrid);
+
+// Game loop
+function isGameOver() {
+  return player.isWinner() || cpu.isWinner();
+}
+
+function makeCPUMove() {
+  const move = cpu.getMove();
+  const targetSquare = document.querySelector(
+    `[data-position="${move[0]},${move[1]}`,
+  );
+  const result = cpu.attack(move);
+  if (result === true) {
+    targetSquare.classList.add('hit');
+  } else {
+    targetSquare.classList.add('miss');
+  }
+}

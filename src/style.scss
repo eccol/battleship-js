@@ -8,15 +8,15 @@
     height: 10px;
   }
 
+  .square.ship {
+    background-color: black;
+  }
+
   .square.hit {
     background-color: green;
   }
 
   .square.miss {
     background-color: red;
-  }
-
-  .square.ship {
-    background-color: black;
   }
 }
