@@ -46,19 +46,23 @@ export default class Gameboard {
     if (target !== null) {
       target.hit();
       this.hits.push(coords);
+      return true;
     } else {
       this.misses.push(coords);
+      return false;
     }
   }
 
   wasAlreadyGuessed(coords) {
-    const wasMissed = this.misses.some((arr) =>
-      arr.every((v, i) => v === coords[i]),
-    );
-    const wasHit = this.hits.some((arr) =>
-      arr.every((v, i) => v === coords[i]),
-    );
-    return wasMissed || wasHit;
+    return this.wasMissed(coords) || this.wasHit(coords);
+  }
+
+  wasHit(coords) {
+    return this.hits.some((arr) => arr.every((v, i) => v === coords[i]));
+  }
+
+  wasMissed(coords) {
+    return this.misses.some((arr) => arr.every((v, i) => v === coords[i]));
   }
 
   areAllSunk() {

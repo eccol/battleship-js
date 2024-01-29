@@ -6,7 +6,7 @@ export class Player {
   }
 
   attack(coords) {
-    this.enemyBoard.receiveAttack(coords);
+    return this.enemyBoard.receiveAttack(coords);
   }
 
   isWinner() {
