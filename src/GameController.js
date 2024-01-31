@@ -19,6 +19,7 @@ export default class GameController {
       new Ship({ length: 3 }),
       new Ship({ length: 2 }),
     ];
+    this.player2.placeShips();
     this.dom.showMessage('Place ship.');
     document
       .querySelector('.boards')

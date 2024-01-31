@@ -1,3 +1,5 @@
+import Ship from './Ship.js';
+
 export class Player {
   constructor(args) {
     this.name = args.name;
@@ -16,21 +18,52 @@ export class Player {
 }
 
 export class CPUPlayer extends Player {
+  getRandomCoordinate(xMax, yMax) {
+    const randomX = Math.floor(Math.random() * xMax);
+    const randomY = Math.floor(Math.random() * yMax);
+    return [randomX, randomY];
+  }
+
   getMove() {
     const xMax = this.enemyBoard.xLength;
     const yMax = this.enemyBoard.yLength;
-    let randomX;
-    let randomY;
     let moveFound = false;
+    let coordinate;
 
     while (!moveFound) {
-      randomX = Math.floor(Math.random() * xMax);
-      randomY = Math.floor(Math.random() * yMax);
-      if (!this.enemyBoard.wasAlreadyGuessed([randomX, randomY]))
-        moveFound = true;
+      coordinate = this.getRandomCoordinate(xMax, yMax);
+      if (!this.enemyBoard.wasAlreadyGuessed(coordinate)) moveFound = true;
     }
 
-    this.guesses.push([randomX, randomY]);
-    return [randomX, randomY];
+    this.guesses.push(coordinate);
+    return coordinate;
+  }
+
+  placeShips() {
+    const shipsToPlace = [
+      new Ship({ length: 5 }),
+      new Ship({ length: 4 }),
+      new Ship({ length: 3 }),
+      new Ship({ length: 3 }),
+      new Ship({ length: 2 }),
+    ];
+
+    const xMax = this.enemyBoard.xLength;
+    const yMax = this.enemyBoard.yLength;
+    while (shipsToPlace.length > 0) {
+      const coordinate = this.getRandomCoordinate(xMax, yMax);
+      const ship = shipsToPlace.shift();
+      let direction = Math.floor(Math.random() * 2);
+      if (direction === 0) {
+        direction = 'h';
+      } else {
+        direction = 'v';
+      }
+      try {
+        this.board.placeShip(ship, coordinate, direction);
+      } catch {
+        shipsToPlace.unshift(ship);
+      }
+    }
   }
 }
