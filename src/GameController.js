@@ -12,11 +12,11 @@ export default class GameController {
   init() {
     this.placementPhase = true;
     this.shipsToPlace = [
-      new Ship({ length: 2 }),
-      new Ship({ length: 3 }),
-      new Ship({ length: 3 }),
-      new Ship({ length: 4 }),
       new Ship({ length: 5 }),
+      new Ship({ length: 4 }),
+      new Ship({ length: 3 }),
+      new Ship({ length: 3 }),
+      new Ship({ length: 2 }),
     ];
     this.dom.showMessage('Place ship.');
     document
@@ -62,7 +62,7 @@ export default class GameController {
     const coordX = Number(coordinates[0]);
     const coordY = Number(coordinates[1]);
 
-    const ship = this.shipsToPlace.pop();
+    const ship = this.shipsToPlace.shift();
     try {
       this.player1.board.placeShip(ship, [coordX, coordY]);
       if (this.shipsToPlace.length === 0) {
