@@ -1,16 +1,33 @@
+import Ship from './Ship.js';
+
 export default class GameController {
   constructor(p1, p2, domController) {
     this.player1 = p1;
     this.player2 = p2;
     this.dom = domController;
     this.inProgress = false;
+    this.placementPhase = false;
+  }
+
+  init() {
     this.placementPhase = true;
+    this.shipsToPlace = [
+      new Ship({ length: 2 }),
+      new Ship({ length: 3 }),
+      new Ship({ length: 3 }),
+      new Ship({ length: 4 }),
+      new Ship({ length: 5 }),
+    ];
+    this.dom.showMessage('Place ship.');
+    document
+      .querySelector('.boards')
+      .append(this.dom.drawBoard(this.player1.board));
   }
 
   startGame() {
     this.placementPhase = false;
     this.inProgress = true;
-    this.dom.showMessage('Start!');
+    this.dom.startGame();
   }
 
   isGameOver() {
@@ -45,7 +62,18 @@ export default class GameController {
     const coordX = Number(coordinates[0]);
     const coordY = Number(coordinates[1]);
 
-    // TODO
+    try {
+      this.player1.board.placeShip(this.shipsToPlace.pop(), [coordX, coordY]);
+      if (this.shipsToPlace.length === 0) {
+        this.startGame();
+      } else {
+        this.dom.clearMessage();
+        this.dom.showMessage('Place next ship.');
+      }
+    } catch {
+      this.dome.clearMessage();
+      this.dom.showMessage('Invalid placement.');
+    }
   }
 
   handleAttack(square) {

@@ -13,6 +13,8 @@ export default class DOMController {
     const playerBoardGrid = this.drawBoard(this.game.player1.board, true);
     playerBoardGrid.classList.add('player');
     document.querySelector('.boards').append(enemyBoardGrid, playerBoardGrid);
+
+    this.showMessage('Start!');
   }
 
   clearMessage() {
