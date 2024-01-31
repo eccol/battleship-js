@@ -12,15 +12,15 @@
     background-color: black;
   }
 
+  .square.select {
+    background-color: gray;
+  }
+
   .square.hit {
     background-color: green;
   }
 
   .square.miss {
     background-color: red;
-  }
-
-  .square.select {
-    background-color: gray;
   }
 }

@@ -59,10 +59,14 @@ export default class DOMController {
           square.classList.add('ship');
         }
 
-        if (!self)
+        if (!self) {
           square.addEventListener('click', (e) => {
             this.game.receiveInput(e);
           });
+          square.addEventListener('mouseover', (e) => {
+            this.highlightAttack(e);
+          });
+        }
 
         if (this.game.placementPhase) {
           square.addEventListener('contextmenu', (e) => {
@@ -82,6 +86,13 @@ export default class DOMController {
       container.appendChild(row);
     }
     return container;
+  }
+
+  highlightAttack(e) {
+    document
+      .querySelectorAll('.select')
+      .forEach((element) => element.classList.remove('select'));
+    e.target.classList.add('select');
   }
 
   highlightPlacement(e) {
