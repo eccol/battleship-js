@@ -10,7 +10,11 @@ export default class GameController {
   }
 
   isGameOver() {
-    return this.player1.isWinner() || this.player2.isWinner();
+    if (this.player1.isWinner() || this.player2.isWinner()) {
+      this.inProgress = false;
+      return true;
+    }
+    return false;
   }
 
   makeCPUMove() {
@@ -32,7 +36,7 @@ export default class GameController {
     const coordX = Number(coordinates[0]);
     const coordY = Number(coordinates[1]);
     if (
-      !this.isGameOver() &&
+      this.inProgress &&
       !this.player2.board.wasAlreadyGuessed([coordX, coordY])
     ) {
       if (this.player1.attack([coordX, coordY])) {
@@ -40,7 +44,11 @@ export default class GameController {
       } else {
         square.classList.add('miss');
       }
-      this.makeCPUMove();
+
+      if (!this.isGameOver()) {
+        this.makeCPUMove();
+        this.isGameOver();
+      }
     }
   }
 }
