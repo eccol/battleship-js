@@ -66,6 +66,7 @@ export default class GameController {
     try {
       this.player1.board.placeShip(ship, [coordX, coordY]);
       if (this.shipsToPlace.length === 0) {
+        this.dom.clearBoards();
         this.startGame();
       } else {
         this.dom.clearMessage();

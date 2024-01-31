@@ -1,6 +1,7 @@
 export default class DOMController {
   constructor() {
     this.messageArea = document.querySelector('.message');
+    this.boardsArea = document.querySelector('.boards');
   }
 
   setGame(game) {
@@ -12,7 +13,7 @@ export default class DOMController {
     enemyBoardGrid.classList.add('enemy');
     const playerBoardGrid = this.drawBoard(this.game.player1.board, true);
     playerBoardGrid.classList.add('player');
-    document.querySelector('.boards').append(enemyBoardGrid, playerBoardGrid);
+    this.boardsArea.append(enemyBoardGrid, playerBoardGrid);
 
     this.showMessage('Start!');
   }
@@ -35,6 +36,10 @@ export default class DOMController {
       square.classList.add('miss');
       this.showMessage(`${player.name} Miss`);
     }
+  }
+
+  clearBoards() {
+    this.boardsArea.innerHTML = '';
   }
 
   drawBoard(board, self = false) {
