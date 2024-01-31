@@ -12,14 +12,13 @@ export default class GameController {
 
   init() {
     this.placementPhase = true;
-    this.shipsToPlace = [
+    this.player2.placeShips([
       new Ship({ length: 5 }),
       new Ship({ length: 4 }),
       new Ship({ length: 3 }),
       new Ship({ length: 3 }),
       new Ship({ length: 2 }),
-    ];
-    this.player2.placeShips();
+    ]);
     this.dom.showMessage('Place ship.');
     document
       .querySelector('.boards')
@@ -63,14 +62,14 @@ export default class GameController {
     const coordX = Number(coordinates[0]);
     const coordY = Number(coordinates[1]);
 
-    const ship = this.shipsToPlace.shift();
+    const ship = this.player1.ships.shift();
     try {
       this.player1.board.placeShip(
         ship,
         [coordX, coordY],
         this.placementDirection,
       );
-      if (this.shipsToPlace.length === 0) {
+      if (this.player1.ships.length === 0) {
         this.dom.clearBoards();
         this.startGame();
       } else {
@@ -79,7 +78,7 @@ export default class GameController {
         this.dom.showMessage('Place next ship.');
       }
     } catch {
-      this.shipsToPlace.unshift(ship);
+      this.player1.ships.unshift(ship);
       this.dom.clearMessage();
       this.dom.showMessage('Invalid placement.');
     }
@@ -106,7 +105,7 @@ export default class GameController {
   }
 
   nextShipLength() {
-    return this.shipsToPlace[0].length;
+    return this.player1.ships[0].length;
   }
 
   togglePlacementDirection() {

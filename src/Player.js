@@ -1,10 +1,9 @@
-import Ship from './Ship.js';
-
 export class Player {
   constructor(args) {
     this.name = args.name;
     this.enemyBoard = args.enemyBoard;
     this.board = args.board;
+    this.ships = args.ships;
     this.guesses = [];
   }
 
@@ -39,15 +38,7 @@ export class CPUPlayer extends Player {
     return coordinate;
   }
 
-  placeShips() {
-    const shipsToPlace = [
-      new Ship({ length: 5 }),
-      new Ship({ length: 4 }),
-      new Ship({ length: 3 }),
-      new Ship({ length: 3 }),
-      new Ship({ length: 2 }),
-    ];
-
+  placeShips(shipsToPlace) {
     const xMax = this.enemyBoard.xLength;
     const yMax = this.enemyBoard.yLength;
     while (shipsToPlace.length > 0) {
