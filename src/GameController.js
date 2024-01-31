@@ -29,10 +29,10 @@ export default class GameController {
 
     if (result === true) {
       targetSquare.classList.add('hit');
-      this.dom.showMessage('Hit!');
+      this.dom.showMessage(`${this.player2.name} Hit!`);
     } else {
       targetSquare.classList.add('miss');
-      this.dom.showMessage('Miss.');
+      this.dom.showMessage(`${this.player2.name} Miss.`);
     }
   }
 
@@ -48,10 +48,10 @@ export default class GameController {
       this.dom.clearMessage();
       if (this.player1.attack([coordX, coordY])) {
         square.classList.add('hit');
-        this.dom.showMessage('Hit!');
+        this.dom.showMessage(`${this.player1.name} Hit!`);
       } else {
         square.classList.add('miss');
-        this.dom.showMessage('Miss.');
+        this.dom.showMessage(`${this.player1.name} Miss.`);
       }
 
       if (!this.isGameOver()) {

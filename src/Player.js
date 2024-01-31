@@ -1,5 +1,6 @@
 export class Player {
   constructor(args) {
+    this.name = args.name;
     this.enemyBoard = args.enemyBoard;
     this.board = args.board;
     this.guesses = [];

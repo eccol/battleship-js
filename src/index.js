@@ -8,8 +8,16 @@ import './style.scss';
 // Inits
 const playerBoard = new Gameboard(10, 10);
 const cpuBoard = new Gameboard(10, 10);
-const player = new Player({ board: playerBoard, enemyBoard: cpuBoard });
-const cpu = new CPUPlayer({ board: cpuBoard, enemyBoard: playerBoard });
+const player = new Player({
+  name: 'Player',
+  board: playerBoard,
+  enemyBoard: cpuBoard,
+});
+const cpu = new CPUPlayer({
+  name: 'Computer',
+  board: cpuBoard,
+  enemyBoard: playerBoard,
+});
 const game = new GameController(player, cpu);
 const domController = new DOMController();
 
