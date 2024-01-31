@@ -1,12 +1,14 @@
 export default class GameController {
-  constructor(p1, p2) {
+  constructor(p1, p2, domController) {
     this.player1 = p1;
     this.player2 = p2;
+    this.dom = domController;
     this.inProgress = false;
+    this.placementPhase = true;
   }
 
-  init(domController) {
-    this.dom = domController;
+  startGame() {
+    this.placementPhase = false;
     this.inProgress = true;
     this.dom.showMessage('Start!');
   }
@@ -32,9 +34,25 @@ export default class GameController {
 
   receiveInput(event) {
     const square = event.target;
-    const coordinates = event.target.dataset.position.split(',');
+
+    if (this.inProgress) this.handleAttack(square);
+    else if (this.placementPhase) this.handlePlacement(square);
+    else console.log('Game is over.');
+  }
+
+  handlePlacement(square) {
+    const coordinates = square.dataset.position.split(',');
     const coordX = Number(coordinates[0]);
     const coordY = Number(coordinates[1]);
+
+    // TODO
+  }
+
+  handleAttack(square) {
+    const coordinates = square.dataset.position.split(',');
+    const coordX = Number(coordinates[0]);
+    const coordY = Number(coordinates[1]);
+
     if (
       this.inProgress &&
       !this.player2.board.wasAlreadyGuessed([coordX, coordY])

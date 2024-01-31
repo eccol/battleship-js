@@ -18,8 +18,9 @@ const cpu = new CPUPlayer({
   board: cpuBoard,
   enemyBoard: playerBoard,
 });
-const game = new GameController(player, cpu);
 const domController = new DOMController();
+const game = new GameController(player, cpu, domController);
+domController.setGame(game);
 
 // Placeholder ship placements
 for (const board of [playerBoard, cpuBoard]) {
@@ -27,5 +28,5 @@ for (const board of [playerBoard, cpuBoard]) {
   board.placeShip(new Ship({ length: 5 }), [3, 4]);
 }
 
-domController.init(game);
-game.init(domController);
+domController.startGame();
+game.startGame();

@@ -1,13 +1,18 @@
 export default class DOMController {
-  init(game) {
+  constructor() {
+    this.messageArea = document.querySelector('.message');
+  }
+
+  setGame(game) {
     this.game = game;
-    const enemyBoardGrid = this.drawBoard(game.player2.board);
+  }
+
+  startGame() {
+    const enemyBoardGrid = this.drawBoard(this.game.player2.board);
     enemyBoardGrid.classList.add('enemy');
-    const playerBoardGrid = this.drawBoard(game.player1.board, true);
+    const playerBoardGrid = this.drawBoard(this.game.player1.board, true);
     playerBoardGrid.classList.add('player');
     document.querySelector('.boards').append(enemyBoardGrid, playerBoardGrid);
-
-    this.messageArea = document.querySelector('.message');
   }
 
   clearMessage() {
