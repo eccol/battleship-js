@@ -7,6 +7,7 @@ export default class GameController {
     this.dom = domController;
     this.inProgress = false;
     this.placementPhase = false;
+    this.placementDirection = 'h';
   }
 
   init() {
@@ -54,7 +55,6 @@ export default class GameController {
 
     if (this.inProgress) this.handleAttack(square);
     else if (this.placementPhase) this.handlePlacement(square);
-    else console.log('Game is over.');
   }
 
   handlePlacement(square) {
@@ -64,7 +64,11 @@ export default class GameController {
 
     const ship = this.shipsToPlace.shift();
     try {
-      this.player1.board.placeShip(ship, [coordX, coordY]);
+      this.player1.board.placeShip(
+        ship,
+        [coordX, coordY],
+        this.placementDirection,
+      );
       if (this.shipsToPlace.length === 0) {
         this.dom.clearBoards();
         this.startGame();
@@ -102,5 +106,13 @@ export default class GameController {
 
   nextShipLength() {
     return this.shipsToPlace[0].length;
+  }
+
+  togglePlacementDirection() {
+    if (this.placementDirection === 'h') {
+      this.placementDirection = 'v';
+    } else {
+      this.placementDirection = 'h';
+    }
   }
 }

@@ -65,6 +65,12 @@ export default class DOMController {
           });
 
         if (this.game.placementPhase) {
+          square.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            this.game.togglePlacementDirection();
+            square.dispatchEvent(new Event('mouseover'));
+            return false;
+          });
           square.addEventListener('mouseover', (e) =>
             this.highlightPlacement(e),
           );
@@ -88,8 +94,15 @@ export default class DOMController {
     const coordY = Number(targetCoords[1]);
 
     for (let i = 0; i < this.game.nextShipLength(); i++) {
+      let dx = 0;
+      let dy = 0;
+      if (this.game.placementDirection === 'h') {
+        dx = i;
+      } else {
+        dy = i;
+      }
       const square = document.querySelector(
-        `[data-position="${coordX + i},${coordY}`,
+        `[data-position="${coordX + dx},${coordY + dy}`,
       );
       if (square) square.classList.add('select');
     }
