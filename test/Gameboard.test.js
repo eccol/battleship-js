@@ -35,6 +35,12 @@ describe('placeShip', () => {
       'Out of bounds',
     );
   });
+
+  it('does not place ships on other ships', () => {
+    const placeFn = () => gameboard.placeShip(largeShip, [1, 1]);
+    placeFn();
+    expect(() => placeFn()).toThrow('Ship already present');
+  });
 });
 
 describe('receiveAttack', () => {

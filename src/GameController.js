@@ -62,8 +62,9 @@ export default class GameController {
     const coordX = Number(coordinates[0]);
     const coordY = Number(coordinates[1]);
 
+    const ship = this.shipsToPlace.pop();
     try {
-      this.player1.board.placeShip(this.shipsToPlace.pop(), [coordX, coordY]);
+      this.player1.board.placeShip(ship, [coordX, coordY]);
       if (this.shipsToPlace.length === 0) {
         this.startGame();
       } else {
@@ -71,7 +72,8 @@ export default class GameController {
         this.dom.showMessage('Place next ship.');
       }
     } catch {
-      this.dome.clearMessage();
+      this.shipsToPlace.unshift(ship);
+      this.dom.clearMessage();
       this.dom.showMessage('Invalid placement.');
     }
   }

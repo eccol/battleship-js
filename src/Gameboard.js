@@ -19,19 +19,27 @@ export default class Gameboard {
     const x = coords[0];
     const y = coords[1];
     const length = ship.length;
+    const targetSquares = [];
 
     if (direction === 'h') {
       if (x + length > this.xLength) throw new Error('Out of bounds');
       for (let i = x; i < x + length; i++) {
-        this.board[i][y] = ship;
+        targetSquares.push([i, y]);
       }
     } else if (direction === 'v') {
       if (y + length > this.yLength) throw new Error('Out of bounds');
       for (let i = y; i < y + length; i++) {
-        this.board[x][i] = ship;
+        targetSquares.push([x, i]);
       }
     } else {
       throw new Error('Invalid direction');
+    }
+
+    if (targetSquares.some((sq) => this.board[sq[0]][sq[1]] !== null)) {
+      throw new Error('Ship already present');
+    }
+    for (const sq of targetSquares) {
+      this.board[sq[0]][sq[1]] = ship;
     }
   }
 
