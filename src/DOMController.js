@@ -3,10 +3,21 @@ export default class DOMController {
     this.game = game;
     const enemyBoardGrid = this.drawBoard(game.player2.board);
     enemyBoardGrid.classList.add('enemy');
-    document.querySelector('.boards').appendChild(enemyBoardGrid);
     const playerBoardGrid = this.drawBoard(game.player1.board, true);
     playerBoardGrid.classList.add('player');
-    document.querySelector('.boards').appendChild(playerBoardGrid);
+    document.querySelector('.boards').append(enemyBoardGrid, playerBoardGrid);
+
+    this.messageArea = document.querySelector('.message');
+  }
+
+  clearMessage() {
+    this.messageArea.innerHTML = '';
+  }
+
+  showMessage(msg) {
+    const newMessage = document.createElement('p');
+    newMessage.innerText = msg;
+    this.messageArea.appendChild(newMessage);
   }
 
   drawBoard(board, self = false) {

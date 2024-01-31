@@ -19,5 +19,5 @@ for (const board of [playerBoard, cpuBoard]) {
   board.placeShip(new Ship({ length: 5 }), [3, 4]);
 }
 
-game.init();
 domController.init(game);
+game.init(domController);

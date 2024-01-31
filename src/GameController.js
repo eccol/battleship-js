@@ -5,13 +5,16 @@ export default class GameController {
     this.inProgress = false;
   }
 
-  init() {
+  init(domController) {
+    this.dom = domController;
     this.inProgress = true;
+    this.dom.showMessage('Start!');
   }
 
   isGameOver() {
     if (this.player1.isWinner() || this.player2.isWinner()) {
       this.inProgress = false;
+      this.dom.showMessage('Game over.');
       return true;
     }
     return false;
@@ -23,10 +26,13 @@ export default class GameController {
       `.player [data-position="${move[0]},${move[1]}`,
     );
     const result = this.player2.attack(move);
+
     if (result === true) {
       targetSquare.classList.add('hit');
+      this.dom.showMessage('Hit!');
     } else {
       targetSquare.classList.add('miss');
+      this.dom.showMessage('Miss.');
     }
   }
 
@@ -39,10 +45,13 @@ export default class GameController {
       this.inProgress &&
       !this.player2.board.wasAlreadyGuessed([coordX, coordY])
     ) {
+      this.dom.clearMessage();
       if (this.player1.attack([coordX, coordY])) {
         square.classList.add('hit');
+        this.dom.showMessage('Hit!');
       } else {
         square.classList.add('miss');
+        this.dom.showMessage('Miss.');
       }
 
       if (!this.isGameOver()) {
