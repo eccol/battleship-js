@@ -60,7 +60,15 @@ export default class DOMController {
         }
 
         if (!self)
-          square.addEventListener('click', (e) => this.game.receiveInput(e));
+          square.addEventListener('click', (e) => {
+            this.game.receiveInput(e);
+          });
+
+        if (this.game.placementPhase) {
+          square.addEventListener('mouseover', (e) =>
+            this.highlightPlacement(e),
+          );
+        }
 
         row.appendChild(square);
       }
@@ -68,5 +76,29 @@ export default class DOMController {
       container.appendChild(row);
     }
     return container;
+  }
+
+  highlightPlacement(e) {
+    document
+      .querySelectorAll('.select')
+      .forEach((element) => element.classList.remove('select'));
+    const target = e.target;
+    const targetCoords = target.dataset.position.split(',');
+    const coordX = Number(targetCoords[0]);
+    const coordY = Number(targetCoords[1]);
+
+    for (let i = 0; i < this.game.nextShipLength(); i++) {
+      const square = document.querySelector(
+        `[data-position="${coordX + i},${coordY}`,
+      );
+      if (square) square.classList.add('select');
+    }
+  }
+
+  setPlacement() {
+    document.querySelectorAll('.select').forEach((element) => {
+      element.classList.remove('select');
+      element.classList.add('ship');
+    });
   }
 }

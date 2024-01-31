@@ -69,6 +69,7 @@ export default class GameController {
         this.dom.clearBoards();
         this.startGame();
       } else {
+        this.dom.setPlacement();
         this.dom.clearMessage();
         this.dom.showMessage('Place next ship.');
       }
@@ -97,5 +98,9 @@ export default class GameController {
         this.isGameOver();
       }
     }
+  }
+
+  nextShipLength() {
+    return this.shipsToPlace[0].length;
   }
 }
