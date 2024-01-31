@@ -2,8 +2,10 @@ export default class DOMController {
   init(game) {
     this.game = game;
     const enemyBoardGrid = this.drawBoard(game.player2.board);
+    enemyBoardGrid.classList.add('enemy');
     document.querySelector('.boards').appendChild(enemyBoardGrid);
     const playerBoardGrid = this.drawBoard(game.player1.board, true);
+    playerBoardGrid.classList.add('player');
     document.querySelector('.boards').appendChild(playerBoardGrid);
   }
 
@@ -18,26 +20,14 @@ export default class DOMController {
       for (let j = 0; j < board.yLength; j++) {
         const square = document.createElement('div');
         square.classList.add('square');
-        if (self) square.dataset.position = `${i},${j}`;
+        square.dataset.position = `${i},${j}`;
 
         if (self && board.shipAt([i, j]) !== null) {
           square.classList.add('ship');
         }
 
-        square.addEventListener('click', () => {
-          if (
-            !self &&
-            !this.game.isGameOver() &&
-            !board.wasAlreadyGuessed([i, j])
-          ) {
-            if (this.game.player1.attack([i, j])) {
-              square.classList.add('hit');
-            } else {
-              square.classList.add('miss');
-            }
-            this.game.makeCPUMove();
-          }
-        });
+        if (!self)
+          square.addEventListener('click', (e) => this.game.receiveInput(e));
 
         row.appendChild(square);
       }
