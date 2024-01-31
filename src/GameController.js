@@ -27,13 +27,7 @@ export default class GameController {
     );
     const result = this.player2.attack(move);
 
-    if (result === true) {
-      targetSquare.classList.add('hit');
-      this.dom.showMessage(`${this.player2.name} Hit!`);
-    } else {
-      targetSquare.classList.add('miss');
-      this.dom.showMessage(`${this.player2.name} Miss.`);
-    }
+    this.dom.updateSquare(targetSquare, this.player2, result);
   }
 
   receiveInput(event) {
@@ -46,13 +40,8 @@ export default class GameController {
       !this.player2.board.wasAlreadyGuessed([coordX, coordY])
     ) {
       this.dom.clearMessage();
-      if (this.player1.attack([coordX, coordY])) {
-        square.classList.add('hit');
-        this.dom.showMessage(`${this.player1.name} Hit!`);
-      } else {
-        square.classList.add('miss');
-        this.dom.showMessage(`${this.player1.name} Miss.`);
-      }
+      const result = this.player1.attack([coordX, coordY]);
+      this.dom.updateSquare(square, this.player1, result);
 
       if (!this.isGameOver()) {
         this.makeCPUMove();

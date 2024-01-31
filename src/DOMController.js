@@ -20,6 +20,16 @@ export default class DOMController {
     this.messageArea.appendChild(newMessage);
   }
 
+  updateSquare(square, player, hit = false) {
+    if (hit) {
+      square.classList.add('hit');
+      this.showMessage(`${player.name} Hit!`);
+    } else {
+      square.classList.add('miss');
+      this.showMessage(`${player.name} Miss`);
+    }
+  }
+
   drawBoard(board, self = false) {
     const container = document.createElement('div');
     container.classList.add('board-container');
