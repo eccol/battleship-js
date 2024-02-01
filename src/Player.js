@@ -29,6 +29,10 @@ export class Player {
       return false;
     }
   }
+
+  nextShip() {
+    return this.ships[0];
+  }
 }
 
 export class CPUPlayer extends Player {

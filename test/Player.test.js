@@ -65,3 +65,26 @@ describe('isWinner', () => {
     expect(player.isWinner()).toBe(false);
   });
 });
+
+describe('nextShip', () => {
+  it('returns a ship when ships are left in the queue', () => {
+    const player = new Player({
+      name: 'Player',
+      board: new Gameboard(10, 10),
+      enemyBoard: new Gameboard(10, 10),
+      ships: [new Ship({ length: 3 }), new Ship({ length: 3 })],
+    });
+    expect(player.nextShip()).toEqual(new Ship({ length: 3 }));
+  });
+
+  it('returns undefined when all ships are placed', () => {
+    const player = new Player({
+      name: 'Player',
+      board: new Gameboard(10, 10),
+      enemyBoard: new Gameboard(10, 10),
+      ships: [new Ship({ length: 3 })],
+    });
+    player.placeShip([1, 1], 'h');
+    expect(player.nextShip()).toBe(undefined);
+  });
+});

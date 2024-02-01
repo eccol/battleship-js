@@ -52,7 +52,7 @@ export default class GameController {
     const placed = this.player1.placeShip(coordinates, this.placementDirection);
 
     if (placed) {
-      if (this.player1.ships.length === 0) {
+      if (this.player1.nextShip() === undefined) {
         this.startGame();
       } else {
         this.dom.setPlacement();
@@ -85,7 +85,7 @@ export default class GameController {
   }
 
   nextShipLength() {
-    return this.player1.ships[0].length;
+    return this.player1.nextShip().length;
   }
 
   togglePlacementDirection() {
