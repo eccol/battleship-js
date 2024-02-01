@@ -1,5 +1,3 @@
-import Ship from './Ship.js';
-
 export default class GameController {
   constructor(p1, p2, domController) {
     this.player1 = p1;
@@ -12,13 +10,7 @@ export default class GameController {
 
   init() {
     this.placementPhase = true;
-    this.player2.placeShips([
-      new Ship({ length: 5 }),
-      new Ship({ length: 4 }),
-      new Ship({ length: 3 }),
-      new Ship({ length: 3 }),
-      new Ship({ length: 2 }),
-    ]);
+    this.player2.placeShips();
     this.dom.showMessage('Place ship.');
     document
       .querySelector('.boards')

@@ -38,7 +38,8 @@ export class CPUPlayer extends Player {
     return coordinate;
   }
 
-  placeShips(shipsToPlace) {
+  placeShips() {
+    const shipsToPlace = this.ships;
     const xMax = this.enemyBoard.xLength;
     const yMax = this.enemyBoard.yLength;
     while (shipsToPlace.length > 0) {
