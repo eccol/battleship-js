@@ -14,23 +14,21 @@ export default class DOMController {
     this.showMessage('Start!');
   }
 
-  clearMessage() {
-    this.messageArea.innerHTML = '';
-  }
-
-  showMessage(msg) {
-    const newMessage = document.createElement('p');
-    newMessage.innerText = msg;
-    this.messageArea.appendChild(newMessage);
+  showMessage(msg, clear = true) {
+    if (clear) {
+      this.messageArea.innerText = msg;
+    } else {
+      this.messageArea.innerText += '\n' + msg;
+    }
   }
 
   updateSquare(square, player, hit = false) {
     if (hit) {
       square.classList.add('hit');
-      this.showMessage(`${player.name} Hit!`);
+      this.showMessage(`${player.name} Hit!`, false);
     } else {
       square.classList.add('miss');
-      this.showMessage(`${player.name} Miss`);
+      this.showMessage(`${player.name} Miss`, false);
     }
   }
 

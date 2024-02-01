@@ -63,13 +63,11 @@ export default class GameController {
         this.startGame();
       } else {
         this.dom.setPlacement();
-        this.dom.clearMessage();
         this.dom.showMessage('Place next ship.');
       }
     } catch (e) {
       console.log(e);
       this.player1.ships.unshift(ship);
-      this.dom.clearMessage();
       this.dom.showMessage('Invalid placement.');
     }
   }
@@ -79,11 +77,12 @@ export default class GameController {
     const coordX = Number(coordinates[0]);
     const coordY = Number(coordinates[1]);
 
+    this.dom.showMessage('');
+
     if (
       this.inProgress &&
       !this.player2.board.wasAlreadyGuessed([coordX, coordY])
     ) {
-      this.dom.clearMessage();
       const result = this.player1.attack([coordX, coordY]);
       this.dom.updateSquare(square, this.player1, result);
 
