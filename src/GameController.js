@@ -12,9 +12,7 @@ export default class GameController {
     this.placementPhase = true;
     this.player2.placeShips();
     this.dom.showMessage('Place ship.');
-    document
-      .querySelector('.boards')
-      .append(this.dom.drawBoard(this.player1.board));
+    this.dom.drawBoard(this.player1.board, 'main');
   }
 
   startGame() {
@@ -35,7 +33,7 @@ export default class GameController {
   makeCPUMove() {
     const move = this.player2.getMove();
     const targetSquare = document.querySelector(
-      `.player [data-position="${move[0]},${move[1]}`,
+      `.side [data-position="${move[0]},${move[1]}`,
     );
     const result = this.player2.attack(move);
 
@@ -62,14 +60,14 @@ export default class GameController {
         this.placementDirection,
       );
       if (this.player1.ships.length === 0) {
-        this.dom.clearBoards();
         this.startGame();
       } else {
         this.dom.setPlacement();
         this.dom.clearMessage();
         this.dom.showMessage('Place next ship.');
       }
-    } catch {
+    } catch (e) {
+      console.log(e);
       this.player1.ships.unshift(ship);
       this.dom.clearMessage();
       this.dom.showMessage('Invalid placement.');

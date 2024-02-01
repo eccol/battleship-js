@@ -1,7 +1,6 @@
 export default class DOMController {
   constructor() {
     this.messageArea = document.querySelector('.message');
-    this.boardsArea = document.querySelector('.boards');
   }
 
   setGame(game) {
@@ -9,11 +8,8 @@ export default class DOMController {
   }
 
   startGame() {
-    const enemyBoardGrid = this.drawBoard(this.game.player2.board);
-    enemyBoardGrid.classList.add('enemy');
-    const playerBoardGrid = this.drawBoard(this.game.player1.board, true);
-    playerBoardGrid.classList.add('player');
-    this.boardsArea.append(enemyBoardGrid, playerBoardGrid);
+    this.drawBoard(this.game.player2.board, 'main');
+    this.drawBoard(this.game.player1.board, 'side', true);
 
     this.showMessage('Start!');
   }
@@ -38,13 +34,12 @@ export default class DOMController {
     }
   }
 
-  clearBoards() {
-    this.boardsArea.innerHTML = '';
-  }
+  drawBoard(board, size, self = false) {
+    if (!['main', 'side'].includes(size))
+      throw new Error('Invalid board position');
 
-  drawBoard(board, self = false) {
-    const container = document.createElement('div');
-    container.classList.add('board-container');
+    const container = document.querySelector(`.board.${size}`);
+    container.innerHTML = '';
 
     for (let i = 0; i < board.xLength; i++) {
       const row = document.createElement('div');
@@ -85,7 +80,6 @@ export default class DOMController {
 
       container.appendChild(row);
     }
-    return container;
   }
 
   highlightAttack(e) {
