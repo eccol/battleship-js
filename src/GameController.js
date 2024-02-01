@@ -49,25 +49,16 @@ export default class GameController {
 
   handlePlacement(square) {
     const coordinates = square.dataset.position.split(',');
-    const coordX = Number(coordinates[0]);
-    const coordY = Number(coordinates[1]);
+    const placed = this.player1.placeShip(coordinates, this.placementDirection);
 
-    const ship = this.player1.ships.shift();
-    try {
-      this.player1.board.placeShip(
-        ship,
-        [coordX, coordY],
-        this.placementDirection,
-      );
+    if (placed) {
       if (this.player1.ships.length === 0) {
         this.startGame();
       } else {
         this.dom.setPlacement();
         this.dom.showMessage('Place next ship.');
       }
-    } catch (e) {
-      console.log(e);
-      this.player1.ships.unshift(ship);
+    } else {
       this.dom.showMessage('Invalid placement.');
     }
   }

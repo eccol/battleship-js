@@ -14,6 +14,21 @@ export class Player {
   isWinner() {
     return this.enemyBoard.areAllSunk();
   }
+
+  placeShip(coordinates, direction) {
+    const coordX = Number(coordinates[0]);
+    const coordY = Number(coordinates[1]);
+
+    const ship = this.ships.shift();
+    try {
+      this.board.placeShip(ship, [coordX, coordY], direction);
+      return true;
+    } catch (e) {
+      console.log(e);
+      this.ships.unshift(ship);
+      return false;
+    }
+  }
 }
 
 export class CPUPlayer extends Player {
