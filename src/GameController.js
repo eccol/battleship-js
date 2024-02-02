@@ -1,5 +1,5 @@
 export default class GameController {
-  constructor(p1, p2, domController) {
+  constructor(p1, p2, domController, shipList) {
     this.player1 = p1;
     this.player2 = p2;
     this.currentTurn = this.player1;
@@ -8,18 +8,25 @@ export default class GameController {
     this.inProgress = false;
     this.placementPhase = false;
     this.placementDirection = 'h';
+    this.shipList = shipList;
   }
 
-  init() {
+  async init() {
     this.placementPhase = true;
-    this.currentTurn.placeShips();
-    this.dom.showMessage('Place ship.');
-    this.dom.drawBoard(this.currentTurn.board, 'main');
+    // this.currentTurn.placeShips();
+    // this.dom.showMessage('Place ship.');
+
+    await this.placementLoop();
+    this.changeTurn();
+    await this.placementLoop();
+    this.changeTurn();
+
+    this.startGame();
 
     // The goal is to remove these lines
-    this.changeTurn();
-    this.currentTurn.placeShips();
-    this.changeTurn();
+    // this.changeTurn();
+    // this.currentTurn.placeShips();
+    // this.changeTurn();
   }
 
   async startGame() {
@@ -32,6 +39,21 @@ export default class GameController {
     }
     this.inProgress = false;
     this.dom.showMessage(`${this.getWinner().name} wins!`);
+  }
+
+  async placementLoop() {
+    this.dom.drawBoard(this.currentTurn.board, 'main');
+    while (this.currentTurn.nextShip() !== undefined) {
+      this.dom.showMessage(`Place ${this.currentTurn.nextShip().name}`);
+      const move = await this.currentTurn.getMove();
+      const dir = this.currentTurn.getDirection() ?? this.placementDirection;
+      try {
+        this.currentTurn.placeShip(move, dir);
+        this.dom.setPlacement();
+      } catch {
+        this.dom.showMessage('Invalid placement');
+      }
+    }
   }
 
   async gameLoop() {
@@ -71,22 +93,11 @@ export default class GameController {
   }
 
   handlePlacement(square) {
-    const coordinates = square.dataset.position.split(',');
-    const placed = this.currentTurn.placeShip(
-      coordinates,
-      this.placementDirection,
-    );
-
-    if (placed) {
-      if (this.currentTurn.nextShip() === undefined) {
-        this.startGame();
-      } else {
-        this.dom.setPlacement();
-        this.dom.showMessage('Place next ship.');
-      }
-    } else {
-      this.dom.showMessage('Invalid placement.');
-    }
+    const coordinates = square.dataset.position
+      .split(',')
+      .map((x) => Number(x));
+    this.currentTurn.resolveMove(coordinates);
+    return;
   }
 
   handleAttack(square) {
@@ -98,7 +109,10 @@ export default class GameController {
   }
 
   nextShipLength() {
-    return this.player1.nextShip().length;
+    if (this.player1.nextShip()) {
+      return this.player1.nextShip().length;
+    }
+    return 0;
   }
 
   togglePlacementDirection() {

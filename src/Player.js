@@ -26,6 +26,10 @@ export class Player {
     });
   }
 
+  getDirection() {
+    return null;
+  }
+
   isWinner() {
     return this.enemyBoard.areAllSunk();
   }
@@ -45,7 +49,7 @@ export class Player {
       return true;
     } catch (e) {
       this.ships.unshift(ship);
-      return false;
+      throw e;
     }
   }
 
@@ -81,6 +85,16 @@ export class CPUPlayer extends Player {
     return Promise.resolve(coordinate);
   }
 
+  getDirection() {
+    let direction = Math.floor(Math.random() * 2);
+    if (direction === 0) {
+      direction = 'h';
+    } else {
+      direction = 'v';
+    }
+    return direction;
+  }
+
   placeShips() {
     const shipsToPlace = this.ships;
     const xMax = this.enemyBoard.xLength;
@@ -88,12 +102,7 @@ export class CPUPlayer extends Player {
     while (shipsToPlace.length > 0) {
       const coordinate = this.getRandomCoordinate(xMax, yMax);
       const ship = shipsToPlace.shift();
-      let direction = Math.floor(Math.random() * 2);
-      if (direction === 0) {
-        direction = 'h';
-      } else {
-        direction = 'v';
-      }
+
       try {
         this.board.placeShip(ship, coordinate, direction);
       } catch {
