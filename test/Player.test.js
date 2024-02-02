@@ -3,10 +3,10 @@ import Ship from '../src/Ship.js';
 import Gameboard from '../src/Gameboard.js';
 
 describe('getMove', () => {
-  it('generates valid attack as CPU', () => {
+  it('generates valid attack as CPU', async () => {
     const board = new Gameboard(10, 10);
     const cpu = new CPUPlayer({ enemyBoard: board });
-    const move = cpu.getMove();
+    const move = await cpu.getMove();
     const fn = () => board.receiveAttack(move);
     expect(fn).not.toThrow();
   });
@@ -14,7 +14,7 @@ describe('getMove', () => {
   it('does not duplicate guesses as CPU', () => {
     const board = new Gameboard(1, 2);
     const cpu = new CPUPlayer({ enemyBoard: board });
-    const fn = () => board.receiveAttack(cpu.getMove());
+    const fn = async () => board.receiveAttack(await cpu.getMove());
     fn();
     expect(fn).not.toThrow();
   });
