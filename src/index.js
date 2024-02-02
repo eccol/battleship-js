@@ -6,7 +6,6 @@ import Ship from './Ship';
 import './style.scss';
 import { cloneDeep } from 'lodash';
 
-// Inits
 const shipList = [
   new Ship({ length: 5, name: 'Ship 5' }),
   new Ship({ length: 4, name: 'Ship 4' }),

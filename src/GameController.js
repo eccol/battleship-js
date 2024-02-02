@@ -1,12 +1,11 @@
 export default class GameController {
-  constructor(p1, p2, domController, shipList) {
+  constructor(p1, p2, domController) {
     this.player1 = p1;
     this.player2 = p2;
-    this.currentTurn = this.player1;
+    this.currentPlayer = this.player1;
     this.currentEnemy = this.player2;
     this.dom = domController;
     this.placementDirection = 'h';
-    this.shipList = shipList;
     this.placementPhase = false;
   }
 
@@ -16,10 +15,6 @@ export default class GameController {
     this.changeTurn();
     await this.placementLoop();
 
-    this.startGame();
-  }
-
-  async startGame() {
     this.placementPhase = false;
     this.dom.startGame();
 
@@ -31,13 +26,13 @@ export default class GameController {
   }
 
   async placementLoop() {
-    this.dom.drawBoard(this.currentTurn.board, 'main');
-    while (this.currentTurn.nextShip() !== undefined) {
-      this.dom.showMessage(`Place ${this.currentTurn.nextShip().name}`);
-      const move = await this.currentTurn.getMove();
-      const dir = this.currentTurn.getDirection() ?? this.placementDirection;
+    this.dom.drawBoard(this.currentPlayer.board, 'main');
+    while (this.currentPlayer.nextShip() !== undefined) {
+      this.dom.showMessage(`Place ${this.currentPlayer.nextShip().name}`);
+      const move = await this.currentPlayer.getMove();
+      const dir = this.currentPlayer.getDirection() ?? this.placementDirection;
       try {
-        this.currentTurn.placeShip(move, dir);
+        this.currentPlayer.placeShip(move, dir);
         this.dom.setPlacement();
       } catch {
         this.dom.showMessage('Invalid placement');
@@ -46,23 +41,34 @@ export default class GameController {
   }
 
   async gameLoop() {
-    const move = await this.currentTurn.getMove();
+    const move = await this.currentPlayer.getMove();
     let report;
     try {
-      report = this.currentTurn.attack(move);
+      report = this.currentPlayer.attack(move);
     } catch {
       this.dom.showMessage('Invalid move');
       return;
     }
-    const targetBoard = this.currentTurn.isCPU ? 'side' : 'main';
+
+    // FIXME: This CPU check will become obsolete when 2 player mode is implemented
+    const targetBoard = this.currentPlayer.isCPU ? 'side' : 'main';
     const square = this.dom.getSquareByCoordinates(move, targetBoard);
-    this.dom.updateSquare(square, this.currentTurn, report.hit);
+    this.dom.updateSquare(square, this.currentPlayer, report.hit);
     if (report.hit && report.ship.isSunk()) {
       this.dom.showMessage(
         `${this.currentEnemy.name}'s ${report.ship.name} sunk!`,
         true,
       );
     }
+  }
+
+  handleInput(event) {
+    const square = event.target;
+    const coordinates = square.dataset.position
+      .split(',')
+      .map((x) => Number(x));
+    this.currentPlayer.resolveCallback(coordinates);
+    return;
   }
 
   isGameOver() {
@@ -72,18 +78,9 @@ export default class GameController {
     return false;
   }
 
-  handleInput(event) {
-    const square = event.target;
-    const coordinates = square.dataset.position
-      .split(',')
-      .map((x) => Number(x));
-    this.currentTurn.resolveMove(coordinates);
-    return;
-  }
-
   nextShipLength() {
-    if (this.player1.nextShip()) {
-      return this.player1.nextShip().length;
+    if (this.currentPlayer.nextShip()) {
+      return this.currentPlayer.nextShip().length;
     }
     return 0;
   }
@@ -97,11 +94,11 @@ export default class GameController {
   }
 
   changeTurn() {
-    if (this.currentTurn === this.player1) {
-      this.currentTurn = this.player2;
+    if (this.currentPlayer === this.player1) {
+      this.currentPlayer = this.player2;
       this.currentEnemy = this.player1;
     } else {
-      this.currentTurn = this.player1;
+      this.currentPlayer = this.player1;
       this.currentEnemy = this.player2;
     }
   }

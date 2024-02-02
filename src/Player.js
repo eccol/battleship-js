@@ -6,6 +6,19 @@ export class Player {
     this.ships = args.ships;
     this.guesses = [];
     this.isCPU = false;
+    this.resolveCallback = null;
+  }
+
+  getMove() {
+    return new Promise((resolve) => {
+      this.resolveCallback = resolve;
+    });
+  }
+
+  getDirection() {
+    // For human players, this will be determined by the
+    // placementDirection variable in GameController
+    return null;
   }
 
   alreadyGuessed(coordinate) {
@@ -20,32 +33,14 @@ export class Player {
     return this.enemyBoard.receiveAttack(coords);
   }
 
-  getMove() {
-    return new Promise((resolve) => {
-      this.resolveMove = resolve;
-    });
-  }
-
-  getDirection() {
-    return null;
-  }
-
   isWinner() {
     return this.enemyBoard.areAllSunk();
   }
 
-  placeShips() {
-    // For human players, this will be done via the DOM
-    return null;
-  }
-
   placeShip(coordinates, direction) {
-    const coordX = Number(coordinates[0]);
-    const coordY = Number(coordinates[1]);
-
     const ship = this.ships.shift();
     try {
-      this.board.placeShip(ship, [coordX, coordY], direction);
+      this.board.placeShip(ship, coordinates, direction);
       return true;
     } catch (e) {
       this.ships.unshift(ship);
@@ -64,12 +59,6 @@ export class CPUPlayer extends Player {
     this.isCPU = true;
   }
 
-  getRandomCoordinate(xMax, yMax) {
-    const randomX = Math.floor(Math.random() * xMax);
-    const randomY = Math.floor(Math.random() * yMax);
-    return [randomX, randomY];
-  }
-
   getMove() {
     const xMax = this.enemyBoard.xLength;
     const yMax = this.enemyBoard.yLength;
@@ -85,6 +74,12 @@ export class CPUPlayer extends Player {
     return Promise.resolve(coordinate);
   }
 
+  getRandomCoordinate(xMax, yMax) {
+    const randomX = Math.floor(Math.random() * xMax);
+    const randomY = Math.floor(Math.random() * yMax);
+    return [randomX, randomY];
+  }
+
   getDirection() {
     let direction = Math.floor(Math.random() * 2);
     if (direction === 0) {
@@ -93,21 +88,5 @@ export class CPUPlayer extends Player {
       direction = 'v';
     }
     return direction;
-  }
-
-  placeShips() {
-    const shipsToPlace = this.ships;
-    const xMax = this.enemyBoard.xLength;
-    const yMax = this.enemyBoard.yLength;
-    while (shipsToPlace.length > 0) {
-      const coordinate = this.getRandomCoordinate(xMax, yMax);
-      const ship = shipsToPlace.shift();
-
-      try {
-        this.board.placeShip(ship, coordinate, direction);
-      } catch {
-        shipsToPlace.unshift(ship);
-      }
-    }
   }
 }

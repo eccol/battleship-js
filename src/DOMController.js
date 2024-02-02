@@ -9,7 +9,7 @@ export default class DOMController {
 
   startGame() {
     this.drawBoard(this.game.player2.board, 'main');
-    this.drawBoard(this.game.player1.board, 'side', true);
+    this.drawBoard(this.game.player1.board, 'side', false);
 
     this.showMessage('Start!');
   }
@@ -32,7 +32,7 @@ export default class DOMController {
     }
   }
 
-  drawBoard(board, size, self = false) {
+  drawBoard(board, size, interactive = true) {
     if (!['main', 'side'].includes(size))
       throw new Error('Invalid board position');
 
@@ -48,11 +48,11 @@ export default class DOMController {
         square.classList.add('square');
         square.dataset.position = `${i},${j}`;
 
-        if (self && board.shipAt([i, j]) !== null) {
+        if (!interactive && board.shipAt([i, j]) !== null) {
           square.classList.add('ship');
         }
 
-        if (!self) {
+        if (interactive) {
           square.addEventListener('click', (e) => {
             this.game.handleInput(e);
           });
