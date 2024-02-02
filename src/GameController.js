@@ -36,7 +36,13 @@ export default class GameController {
 
   async gameLoop() {
     const move = await this.currentTurn.getMove();
-    const report = this.currentTurn.attack(move);
+    let report;
+    try {
+      report = this.currentTurn.attack(move);
+    } catch {
+      this.dom.showMessage('Invalid move');
+      return;
+    }
     const targetBoard = this.currentTurn.isCPU ? 'side' : 'main';
     const square = this.dom.getSquareByCoordinates(move, targetBoard);
     this.dom.updateSquare(square, this.currentTurn, report.hit);
