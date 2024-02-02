@@ -24,6 +24,11 @@ export class Player {
     return this.enemyBoard.areAllSunk();
   }
 
+  placeShips() {
+    // For human players, this will be done via the DOM
+    return null;
+  }
+
   placeShip(coordinates, direction) {
     const coordX = Number(coordinates[0]);
     const coordY = Number(coordinates[1]);

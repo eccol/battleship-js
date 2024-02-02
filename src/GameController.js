@@ -12,9 +12,14 @@ export default class GameController {
 
   init() {
     this.placementPhase = true;
-    this.player2.placeShips();
+    this.currentTurn.placeShips();
     this.dom.showMessage('Place ship.');
-    this.dom.drawBoard(this.player1.board, 'main');
+    this.dom.drawBoard(this.currentTurn.board, 'main');
+
+    // The goal is to remove these lines
+    this.changeTurn();
+    this.currentTurn.placeShips();
+    this.changeTurn();
   }
 
   startGame() {
