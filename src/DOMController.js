@@ -54,7 +54,7 @@ export default class DOMController {
 
         if (!self) {
           square.addEventListener('click', (e) => {
-            this.game.receiveInput(e);
+            this.game.handleInput(e);
           });
           square.addEventListener('mouseover', (e) => {
             this.highlightAttack(e);

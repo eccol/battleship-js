@@ -5,39 +5,28 @@ export default class GameController {
     this.currentTurn = this.player1;
     this.currentEnemy = this.player2;
     this.dom = domController;
-    this.inProgress = false;
-    this.placementPhase = false;
     this.placementDirection = 'h';
     this.shipList = shipList;
+    this.placementPhase = false;
   }
 
   async init() {
     this.placementPhase = true;
-    // this.currentTurn.placeShips();
-    // this.dom.showMessage('Place ship.');
-
     await this.placementLoop();
     this.changeTurn();
     await this.placementLoop();
-    this.changeTurn();
 
     this.startGame();
-
-    // The goal is to remove these lines
-    // this.changeTurn();
-    // this.currentTurn.placeShips();
-    // this.changeTurn();
   }
 
   async startGame() {
     this.placementPhase = false;
-    this.inProgress = true;
     this.dom.startGame();
 
     while (!this.isGameOver()) {
+      this.changeTurn();
       await this.gameLoop();
     }
-    this.inProgress = false;
     this.dom.showMessage(`${this.getWinner().name} wins!`);
   }
 
@@ -74,8 +63,6 @@ export default class GameController {
         true,
       );
     }
-
-    this.changeTurn();
   }
 
   isGameOver() {
@@ -85,22 +72,8 @@ export default class GameController {
     return false;
   }
 
-  receiveInput(event) {
+  handleInput(event) {
     const square = event.target;
-
-    if (this.inProgress) this.handleAttack(square);
-    else if (this.placementPhase) this.handlePlacement(square);
-  }
-
-  handlePlacement(square) {
-    const coordinates = square.dataset.position
-      .split(',')
-      .map((x) => Number(x));
-    this.currentTurn.resolveMove(coordinates);
-    return;
-  }
-
-  handleAttack(square) {
     const coordinates = square.dataset.position
       .split(',')
       .map((x) => Number(x));
