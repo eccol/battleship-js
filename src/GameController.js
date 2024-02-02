@@ -22,9 +22,10 @@ export default class GameController {
   }
 
   isGameOver() {
-    if (this.player1.isWinner() || this.player2.isWinner()) {
+    const winner = this.getWinner();
+    if (winner !== null) {
       this.inProgress = false;
-      this.dom.showMessage('Game over.');
+      this.dom.showMessage(`${winner.name} wins!`);
       return true;
     }
     return false;
@@ -94,5 +95,14 @@ export default class GameController {
     } else {
       this.placementDirection = 'h';
     }
+  }
+
+  getWinner() {
+    if (this.player1.isWinner()) {
+      return this.player1;
+    } else if (this.player2.isWinner()) {
+      return this.player2;
+    }
+    return null;
   }
 }
