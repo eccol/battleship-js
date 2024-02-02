@@ -30,6 +30,8 @@ export default class GameController {
     while (!this.isGameOver()) {
       await this.gameLoop();
     }
+    this.inProgress = false;
+    this.dom.showMessage(`${this.getWinner().name} wins!`);
   }
 
   async gameLoop() {
@@ -49,10 +51,7 @@ export default class GameController {
   }
 
   isGameOver() {
-    const winner = this.getWinner();
-    if (winner !== null) {
-      this.inProgress = false;
-      this.dom.showMessage(`${winner.name} wins!`);
+    if (this.getWinner() !== null) {
       return true;
     }
     return false;
