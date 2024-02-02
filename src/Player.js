@@ -64,7 +64,7 @@ export class CPUPlayer extends Player {
 
     while (!moveFound) {
       coordinate = this.getRandomCoordinate(xMax, yMax);
-      if (!this.enemyBoard.wasAlreadyGuessed(coordinate)) moveFound = true;
+      if (!this.alreadyGuessed(coordinate)) moveFound = true;
     }
 
     this.guesses.push(coordinate);

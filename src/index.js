@@ -8,11 +8,11 @@ import { cloneDeep } from 'lodash';
 
 // Inits
 const shipList = [
-  new Ship({ length: 5 }),
-  new Ship({ length: 4 }),
-  new Ship({ length: 3 }),
-  new Ship({ length: 3 }),
-  new Ship({ length: 2 }),
+  new Ship({ length: 5, name: 'Ship 5' }),
+  new Ship({ length: 4, name: 'Ship 4' }),
+  new Ship({ length: 3, name: 'Ship 3-1' }),
+  new Ship({ length: 3, name: 'Ship 3-2' }),
+  new Ship({ length: 2, name: 'Ship 2' }),
 ];
 const playerBoard = new Gameboard(10, 10);
 const cpuBoard = new Gameboard(10, 10);

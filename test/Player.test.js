@@ -31,17 +31,12 @@ describe('attack', () => {
     spy.mockClear();
   });
 
-  it('returns true if hit', () => {
+  it('returns the DamageReport object', () => {
     const board = new Gameboard(10, 10);
-    board.placeShip(new Ship({ length: 2 }), [1, 1]);
+    const ship = new Ship({ length: 2 });
+    board.placeShip(ship, [1, 1]);
     const player = new Player({ enemyBoard: board });
-    expect(player.attack([1, 1])).toBe(true);
-  });
-
-  it('returns false if miss', () => {
-    const board = new Gameboard(10, 10);
-    const player = new Player({ enemyBoard: board });
-    expect(player.attack([9, 9])).toBe(false);
+    expect(player.attack([1, 1])).toEqual({ hit: true, ship: ship });
   });
 });
 

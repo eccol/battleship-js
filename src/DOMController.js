@@ -14,7 +14,7 @@ export default class DOMController {
     this.showMessage('Start!');
   }
 
-  showMessage(msg, clear = true) {
+  showMessage(msg, clear = false) {
     if (clear) {
       this.messageArea.innerText = msg;
     } else {

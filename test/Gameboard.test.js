@@ -69,6 +69,18 @@ describe('receiveAttack', () => {
     fnMiss();
     expect(fnMiss).toThrow('Duplicate guess');
   });
+
+  it('returns a damage report when miss', () => {
+    expect(gameboard.receiveAttack([1, 1])).toEqual({ hit: false, ship: null });
+  });
+
+  it('returns a damage report when hit', () => {
+    gameboard.placeShip(smallShip, [1, 1]);
+    expect(gameboard.receiveAttack([1, 1])).toEqual({
+      hit: true,
+      ship: smallShip,
+    });
+  });
 });
 
 describe('areAllSunk', () => {

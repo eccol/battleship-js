@@ -54,10 +54,10 @@ export default class Gameboard {
     if (target !== null) {
       target.hit();
       this.hits.push(coords);
-      return true;
+      return new DamageReport(true, target);
     } else {
       this.misses.push(coords);
-      return false;
+      return new DamageReport(false, null);
     }
   }
 
@@ -81,5 +81,12 @@ export default class Gameboard {
       }
     }
     return true;
+  }
+}
+
+class DamageReport {
+  constructor(hit, ship) {
+    this.hit = hit;
+    this.ship = ship;
   }
 }

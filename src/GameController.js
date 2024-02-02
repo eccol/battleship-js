@@ -3,6 +3,7 @@ export default class GameController {
     this.player1 = p1;
     this.player2 = p2;
     this.currentTurn = this.player1;
+    this.currentEnemy = this.player2;
     this.dom = domController;
     this.inProgress = false;
     this.placementPhase = false;
@@ -62,12 +63,19 @@ export default class GameController {
     const coordinates = square.dataset.position.split(',');
 
     if (this.inProgress && !this.currentTurn.alreadyGuessed(coordinates)) {
-      const result = this.currentTurn.attack(coordinates);
-      this.dom.updateSquare(square, this.currentTurn, result);
+      const report = this.currentTurn.attack(coordinates);
+      this.dom.updateSquare(square, this.currentTurn, report.hit);
+      if (report.hit && report.ship.isSunk()) {
+        this.dom.showMessage(
+          `${this.currentEnemy.name}'s ${report.ship.name} sunk!`,
+          true,
+        );
+      }
 
       if (!this.isGameOver()) {
         this.changeTurn();
         if (this.currentTurn.isCPU) {
+          console.log(this.player2.board.board);
           const move = this.currentTurn.getMove();
           const targetSquare = document.querySelector(
             `.side [data-position="${move[0]},${move[1]}`,
@@ -94,8 +102,10 @@ export default class GameController {
   changeTurn() {
     if (this.currentTurn === this.player1) {
       this.currentTurn = this.player2;
+      this.currentEnemy = this.player1;
     } else {
       this.currentTurn = this.player1;
+      this.currentEnemy = this.player2;
     }
   }
 
