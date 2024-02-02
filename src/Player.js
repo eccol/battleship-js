@@ -20,6 +20,12 @@ export class Player {
     return this.enemyBoard.receiveAttack(coords);
   }
 
+  getMove() {
+    return new Promise((resolve) => {
+      this.resolveMove = resolve;
+    });
+  }
+
   isWinner() {
     return this.enemyBoard.areAllSunk();
   }
@@ -72,7 +78,7 @@ export class CPUPlayer extends Player {
     }
 
     this.guesses.push(coordinate);
-    return coordinate;
+    return Promise.resolve(coordinate);
   }
 
   placeShips() {

@@ -117,4 +117,10 @@ export default class DOMController {
       element.classList.add('ship');
     });
   }
+
+  getSquareByCoordinates(coordinates, board) {
+    return document.querySelector(
+      `.${board} [data-position="${coordinates[0]},${coordinates[1]}"]`,
+    );
+  }
 }

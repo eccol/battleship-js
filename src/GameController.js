@@ -22,10 +22,30 @@ export default class GameController {
     this.changeTurn();
   }
 
-  startGame() {
+  async startGame() {
     this.placementPhase = false;
     this.inProgress = true;
     this.dom.startGame();
+
+    while (!this.isGameOver()) {
+      await this.gameLoop();
+    }
+  }
+
+  async gameLoop() {
+    const move = await this.currentTurn.getMove();
+    const report = this.currentTurn.attack(move);
+    const targetBoard = this.currentTurn.isCPU ? 'side' : 'main';
+    const square = this.dom.getSquareByCoordinates(move, targetBoard);
+    this.dom.updateSquare(square, this.currentTurn, report.hit);
+    if (report.hit && report.ship.isSunk()) {
+      this.dom.showMessage(
+        `${this.currentEnemy.name}'s ${report.ship.name} sunk!`,
+        true,
+      );
+    }
+
+    this.changeTurn();
   }
 
   isGameOver() {
@@ -65,30 +85,11 @@ export default class GameController {
   }
 
   handleAttack(square) {
-    const coordinates = square.dataset.position.split(',');
-
-    if (this.inProgress && !this.currentTurn.alreadyGuessed(coordinates)) {
-      const report = this.currentTurn.attack(coordinates);
-      this.dom.updateSquare(square, this.currentTurn, report.hit);
-      if (report.hit && report.ship.isSunk()) {
-        this.dom.showMessage(
-          `${this.currentEnemy.name}'s ${report.ship.name} sunk!`,
-          true,
-        );
-      }
-
-      if (!this.isGameOver()) {
-        this.changeTurn();
-        if (this.currentTurn.isCPU) {
-          const move = this.currentTurn.getMove();
-          const targetSquare = document.querySelector(
-            `.side [data-position="${move[0]},${move[1]}`,
-          );
-          this.handleAttack(targetSquare);
-          this.isGameOver();
-        }
-      }
-    }
+    const coordinates = square.dataset.position
+      .split(',')
+      .map((x) => Number(x));
+    this.currentTurn.resolveMove(coordinates);
+    return;
   }
 
   nextShipLength() {
