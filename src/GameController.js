@@ -75,7 +75,6 @@ export default class GameController {
       if (!this.isGameOver()) {
         this.changeTurn();
         if (this.currentTurn.isCPU) {
-          console.log(this.player2.board.board);
           const move = this.currentTurn.getMove();
           const targetSquare = document.querySelector(
             `.side [data-position="${move[0]},${move[1]}`,

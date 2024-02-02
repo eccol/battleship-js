@@ -33,7 +33,6 @@ export class Player {
       this.board.placeShip(ship, [coordX, coordY], direction);
       return true;
     } catch (e) {
-      console.log(e);
       this.ships.unshift(ship);
       return false;
     }
