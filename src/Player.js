@@ -5,9 +5,18 @@ export class Player {
     this.board = args.board;
     this.ships = args.ships;
     this.guesses = [];
+    this.isCPU = false;
+  }
+
+  alreadyGuessed(coordinate) {
+    return this.guesses.some(
+      // Stringify arrays in order to compare values instead of objects
+      (guess) => JSON.stringify(guess) === JSON.stringify(coordinate),
+    );
   }
 
   attack(coords) {
+    this.guesses.push(coords);
     return this.enemyBoard.receiveAttack(coords);
   }
 
@@ -36,6 +45,11 @@ export class Player {
 }
 
 export class CPUPlayer extends Player {
+  constructor(args) {
+    super(args);
+    this.isCPU = true;
+  }
+
   getRandomCoordinate(xMax, yMax) {
     const randomX = Math.floor(Math.random() * xMax);
     const randomY = Math.floor(Math.random() * yMax);
