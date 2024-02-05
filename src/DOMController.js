@@ -46,9 +46,9 @@ export default class DOMController {
       for (let j = 0; j < board.yLength; j++) {
         const square = document.createElement('div');
         square.classList.add('square');
-        square.dataset.position = `${i},${j}`;
+        square.dataset.position = `${j},${i}`;
 
-        if (!interactive && board.shipAt([i, j]) !== null) {
+        if (!interactive && board.shipAt([j, i]) !== null) {
           square.classList.add('ship');
         }
 
