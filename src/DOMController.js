@@ -7,7 +7,7 @@ export default class DOMController {
     this.game = game;
   }
 
-  showMessage(msg, options = {}) {
+  showMessage(msg, options = { clear: false, bold: false }) {
     if (options.clear) this.messageArea.innerHTML = '';
 
     const msgElement = document.createElement('p');
