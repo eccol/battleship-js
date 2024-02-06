@@ -95,6 +95,7 @@ export default class GameController {
   }
 
   nextShipLength() {
+    if (this.currentPlayer.isCPU) return 0;
     if (this.currentPlayer.nextShip()) {
       return this.currentPlayer.nextShip().length;
     }
