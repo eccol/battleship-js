@@ -28,16 +28,19 @@ export default class GameController {
   }
 
   async placementLoop() {
+    if (this.currentPlayer.isCPU) this.dom.showMessage('CPU placing ships...');
     this.dom.drawBoard(this.currentPlayer.board, 'main');
     while (this.currentPlayer.nextShip() !== undefined) {
-      this.dom.showMessage(`Place ${this.currentPlayer.nextShip().name}`);
+      if (!this.currentPlayer.isCPU)
+        this.dom.showMessage(`Place ${this.currentPlayer.nextShip().name}`);
       const move = await this.currentPlayer.getMove();
       const dir = this.currentPlayer.getDirection() ?? this.placementDirection;
       try {
         this.currentPlayer.placeShip(move, dir);
-        this.dom.setPlacement();
+        if (!this.currentPlayer.isCPU) this.dom.setPlacement();
       } catch {
-        this.dom.showMessage('Invalid placement');
+        if (!this.currentPlayer.isCPU)
+          this.dom.showMessage('Invalid placement');
       }
     }
   }
@@ -69,7 +72,13 @@ export default class GameController {
     const coordinates = square.dataset.position
       .split(',')
       .map((x) => Number(x));
-    this.currentPlayer.resolveCallback(coordinates);
+
+    // Player.resolveCallback does not exist if it is the CPU's turn
+    try {
+      this.currentPlayer.resolveCallback(coordinates);
+    } catch {
+      console.warn('Too early, not your turn.');
+    }
     return;
   }
 

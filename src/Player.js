@@ -59,7 +59,7 @@ export class CPUPlayer extends Player {
     this.isCPU = true;
   }
 
-  getMove() {
+  async getMove() {
     const xMax = this.enemyBoard.xLength;
     const yMax = this.enemyBoard.yLength;
     let moveFound = false;
@@ -69,6 +69,8 @@ export class CPUPlayer extends Player {
       coordinate = this.getRandomCoordinate(xMax, yMax);
       if (!this.alreadyGuessed(coordinate)) moveFound = true;
     }
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     this.guesses.push(coordinate);
     return Promise.resolve(coordinate);
