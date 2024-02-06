@@ -7,28 +7,24 @@ export default class DOMController {
     this.game = game;
   }
 
-  startGame() {
-    this.drawBoard(this.game.player2.board, 'main');
-    this.drawBoard(this.game.player1.board, 'side', false);
+  showMessage(msg, options = {}) {
+    if (options.clear) this.messageArea.innerHTML = '';
 
-    this.showMessage('Start!');
-  }
+    const msgElement = document.createElement('p');
+    msgElement.innerText = msg;
 
-  showMessage(msg, clear = false) {
-    if (clear) {
-      this.messageArea.innerText = msg;
-    } else {
-      this.messageArea.innerText += '\n' + msg;
-    }
+    if (options.bold) msgElement.classList.add('bold');
+
+    this.messageArea.prepend(msgElement);
   }
 
   updateSquare(square, player, hit = false) {
     if (hit) {
       square.classList.add('hit');
-      this.showMessage(`${player.name} Hit!`, false);
+      this.showMessage(`✅ ${player.name} Hit!`);
     } else {
       square.classList.add('miss');
-      this.showMessage(`${player.name} Miss`, false);
+      this.showMessage(`❌ ${player.name} Miss`);
     }
   }
 

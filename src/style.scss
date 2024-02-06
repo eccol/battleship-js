@@ -68,4 +68,8 @@ body {
 .message {
   height: 200px;
   overflow: auto;
+
+  .bold {
+    font-weight: bold;
+  }
 }

@@ -16,13 +16,15 @@ export default class GameController {
     await this.placementLoop();
 
     this.placementPhase = false;
-    this.dom.startGame();
+    this.dom.drawBoard(this.player2.board, 'main');
+    this.dom.drawBoard(this.player1.board, 'side', false);
+    this.dom.showMessage('💣 Start!', { clear: true });
 
     while (!this.isGameOver()) {
       this.changeTurn();
       await this.gameLoop();
     }
-    this.dom.showMessage(`${this.getWinner().name} wins!`);
+    this.dom.showMessage(`👑 ${this.getWinner().name} wins!`, { bold: true });
   }
 
   async placementLoop() {
@@ -56,8 +58,8 @@ export default class GameController {
     this.dom.updateSquare(square, this.currentPlayer, report.hit);
     if (report.hit && report.ship.isSunk()) {
       this.dom.showMessage(
-        `${this.currentEnemy.name}'s ${report.ship.name} sunk!`,
-        true,
+        `🌊 ${this.currentEnemy.name}'s ${report.ship.name} sunk!`,
+        { bold: true },
       );
     }
   }
