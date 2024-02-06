@@ -46,13 +46,18 @@ export default class GameController {
   }
 
   async gameLoop() {
-    const move = await this.currentPlayer.getMove();
+    let moveFound = false;
+    let move;
     let report;
-    try {
-      report = this.currentPlayer.attack(move);
-    } catch {
-      this.dom.showMessage('Invalid move');
-      return;
+
+    while (!moveFound) {
+      move = await this.currentPlayer.getMove();
+      try {
+        report = this.currentPlayer.attack(move);
+        moveFound = true;
+      } catch {
+        this.dom.showMessage('Invalid move');
+      }
     }
 
     // FIXME: This CPU check will become obsolete when 2 player mode is implemented
