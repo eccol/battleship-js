@@ -1,3 +1,5 @@
+$breakpoint: 550px;
+
 * {
   margin: 0;
   padding: 0;
@@ -71,5 +73,11 @@ body {
 
   .bold {
     font-weight: bold;
+  }
+}
+
+@media (max-width: $breakpoint) {
+  .container {
+    display: block;
   }
 }
