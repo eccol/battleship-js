@@ -3,9 +3,15 @@
   padding: 0;
 }
 
+body {
+  display: flex;
+  justify-content: center;
+}
+
 .container {
+  flex: 0 1 800px;
   display: grid;
-  grid-template-columns: repeat(1fr, 2);
+  grid-template-columns: 2fr 1fr;
   grid-template-rows: repeat(1fr, 2);
 
   .main {
@@ -27,6 +33,7 @@
   margin: 1rem;
   display: flex;
   flex-direction: column;
+  aspect-ratio: 1/1;
 
   .row {
     min-width: 10px;
