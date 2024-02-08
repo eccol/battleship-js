@@ -40,7 +40,14 @@ export default class GameController {
   }
 
   async placementLoop() {
-    if (this.currentPlayer.isCPU) this.dom.showMessage('CPU placing ships...');
+    if (this.currentPlayer.isCPU) {
+      this.dom.showMessage('CPU placing ships...', { clear: true });
+    } else {
+      this.dom.showMessage(`${this.currentPlayer.name}, place your ships.`, {
+        clear: true,
+      });
+    }
+
     this.dom.drawBoard(this.currentPlayer.board, 'main');
     while (this.currentPlayer.nextShip() !== undefined) {
       if (!this.currentPlayer.isCPU)
