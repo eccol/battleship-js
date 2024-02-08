@@ -76,6 +76,13 @@ body {
   }
 }
 
+.change-turns {
+  width: 100%;
+  height: 100%;
+  border: none;
+  position: absolute;
+}
+
 @media (max-width: $breakpoint) {
   .container {
     display: block;

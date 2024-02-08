@@ -9,6 +9,10 @@ export default class GameController {
     this.placementPhase = false;
   }
 
+  async wait(seconds) {
+    return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
+  }
+
   async init() {
     this.placementPhase = true;
     await this.placementLoop();
@@ -21,7 +25,15 @@ export default class GameController {
     this.dom.showMessage('💣 Start!', { clear: true });
 
     while (!this.isGameOver()) {
+      if (!this.player2.isCPU && !this.isFirstTurn()) {
+        await this.wait(1);
+        await this.dom.changeTurns();
+      }
       this.changeTurn();
+      if (!this.player2.isCPU) {
+        this.dom.drawBoard(this.currentEnemy.board, 'main');
+        this.dom.drawBoard(this.currentPlayer.board, 'side', false);
+      }
       await this.gameLoop();
     }
     this.dom.showMessage(`👑 ${this.getWinner().name} wins!`, { bold: true });
@@ -127,5 +139,9 @@ export default class GameController {
       return this.player2;
     }
     return null;
+  }
+
+  isFirstTurn() {
+    return this.player1.guesses.length === 0;
   }
 }

@@ -1,6 +1,14 @@
 export default class DOMController {
   constructor() {
     this.messageArea = document.querySelector('.message');
+    this.changeTurnCallback = null;
+    this.changeTurnScreen = document.querySelector('.change-turns');
+    this.changeTurnScreen
+      .querySelector('button')
+      .addEventListener('click', () => {
+        this.changeTurnScreen.close();
+        this.changeTurnCallback(true);
+      });
   }
 
   setGame(game) {
@@ -44,7 +52,17 @@ export default class DOMController {
         square.classList.add('square');
         square.dataset.position = `${j},${i}`;
 
-        if (!interactive && board.shipAt([j, i]) !== null) {
+        if (board.shipAt([j, i]) === 'hit') {
+          square.classList.add('hit');
+        } else if (board.shipAt([j, i]) === 'miss') {
+          square.classList.add('miss');
+        }
+
+        if (
+          !interactive &&
+          typeof board.shipAt([j, i]) === 'object' &&
+          board.shipAt([j, i]) !== null
+        ) {
           square.classList.add('ship');
         }
 
@@ -74,6 +92,13 @@ export default class DOMController {
 
       container.appendChild(row);
     }
+  }
+
+  changeTurns() {
+    this.changeTurnScreen.showModal();
+    return new Promise((resolve) => {
+      this.changeTurnCallback = resolve;
+    });
   }
 
   highlightAttack(e) {

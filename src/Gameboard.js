@@ -51,11 +51,13 @@ export default class Gameboard {
     if (this.wasAlreadyGuessed(coords)) throw new Error('Duplicate guess');
 
     const target = this.shipAt(coords);
-    if (target !== null) {
+    if (typeof target === 'object' && target !== null) {
       target.hit();
+      this.board[coords[0]][coords[1]] = 'hit';
       this.hits.push(coords);
       return new DamageReport(true, target);
     } else {
+      this.board[coords[0]][coords[1]] = 'miss';
       this.misses.push(coords);
       return new DamageReport(false, null);
     }
@@ -77,7 +79,8 @@ export default class Gameboard {
     for (let i = 0; i < this.xLength; i++) {
       for (let j = 0; j < this.yLength; j++) {
         const target = this.shipAt([i, j]);
-        if (target !== null && !target.isSunk()) return false;
+        if (typeof target === 'object' && target !== null && !target.isSunk())
+          return false;
       }
     }
     return true;
